@@ -1,15 +1,10 @@
-class MovabaleObject {
-  x = 10;
-  y = 280;
-  img;
-  height = 150;
-  width = 100;
-  imageCache = {};
-  curentImage = 0;
+class MovabaleObject extends DrawableObject {
   speed = 0.15;
   otherdirection = false;
   speedY = 0;
   acceleration = 2.1;
+  energy = 100;
+  lastHit = 0;
 
   applyGravity() {
     setInterval(() => {
@@ -22,16 +17,6 @@ class MovabaleObject {
 
   isAboveGround() {
     return this.y < 180;
-  }
-
-  //load image from path
-  loadImage(path) {
-    this.img = new Image();
-    this.img.src = path;
-  }
-
-  draw(ctx) {
-    ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
   }
 
   drawFrame(ctx) {
@@ -47,13 +32,46 @@ class MovabaleObject {
       ctx.stroke();
     }
   }
+  isColliding(movableObject) {
+    return (
+      this.x + this.width > movableObject.x && // R -> L
+      this.y + this.height > movableObject.y && // T -> B
+      this.x < movableObject.x && // L -> R
+      this.y < movableObject.y + movableObject.height // B -> T
+    );
+  }
 
-  loadImages(arr) {
-    arr.forEach((path) => {
-      let img = new Image();
-      img.src = path;
-      this.imageCache[path] = img;
-    });
+  hit() {
+    this.energy -= 5;
+    if (this.energy < 0) {
+      this.energy = 0;
+    } else {
+      // Speichert Zeit seit letztem hit
+      this.lastHit = new Date().getTime();
+    }
+  }
+
+  isHurt() {
+    let timepassed = new Date().getTime() - this.lastHit; // difference in ms
+    timepassed = timepassed / 1000;
+    return timepassed < 1;
+  }
+
+  isDead() {
+    return this.energy == 0;
+  }
+
+  isColliding2(movableObject) {
+    return (
+      this.x + this.width - this.offset.right >
+        movableObject.x + movableObject.offset.left && // R -> L
+      this.y + this.height - this.offset.bottom >
+        movableObject.y + movableObject.offset.top && // T -> B
+      this.x + this.offset.left <
+        movableObject.x + movableObject.width - movableObject.offset.right && // L -> R
+      this.y + this.offset.top <
+        movableObject.y + movableObject.height - movableObject.offset.bottom
+    );
   }
 
   playAnimation(images) {
