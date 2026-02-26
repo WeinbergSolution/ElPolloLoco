@@ -12,9 +12,16 @@ window.addEventListener("keydown", (e) => {
   if (e.keyCode == 39) {
     keyboard.RIGHT = true;
   }
+  if (e.keyCode == 68) {
+    keyboard.RIGHT = true;
+  }
   if (e.keyCode == 37) {
     keyboard.LEFT = true;
   }
+  if (e.keyCode == 65) {
+    keyboard.LEFT = true;
+  }
+
   if (e.keyCode == 38) {
     keyboard.UP = true;
   }
@@ -30,7 +37,13 @@ window.addEventListener("keyup", (e) => {
   if (e.keyCode == 39) {
     keyboard.RIGHT = false;
   }
+  if (e.keyCode == 68) {
+    keyboard.RIGHT = false;
+  }
   if (e.keyCode == 37) {
+    keyboard.LEFT = false;
+  }
+  if (e.keyCode == 65) {
     keyboard.LEFT = false;
   }
   if (e.keyCode == 38) {

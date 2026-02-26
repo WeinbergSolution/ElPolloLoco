@@ -46,17 +46,11 @@ class World {
     if (movableObject.otherdirection) {
       this.flipImage(movableObject);
     }
-    this.ctx.drawImage(
-      movableObject.img,
-      movableObject.x,
-      movableObject.y,
-      movableObject.width,
-      movableObject.height,
-    );
+    movableObject.draw(this.ctx);
+    movableObject.drawFrame(this.ctx);
 
     if (movableObject.otherdirection) {
-      movableObject.x = movableObject.x * -1; // Korrigieren der x-Position nach dem Spiegeln
-      this.ctx.restore();
+      this.flipImageBack(movableObject);
     }
   }
 
@@ -64,6 +58,11 @@ class World {
     this.ctx.save();
     this.ctx.translate(movableObject.width, 0);
     this.ctx.scale(-1, 1);
+    movableObject.x = movableObject.x * -1;
+  }
+
+  flipImageBack(movableObject) {
+    this.ctx.restore();
     movableObject.x = movableObject.x * -1;
   }
 }
