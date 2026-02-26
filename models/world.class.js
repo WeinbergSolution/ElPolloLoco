@@ -5,6 +5,9 @@ class World {
   ctx;
   keyboard;
   camera_x = 0;
+  statusBar = new StatusBar();
+  bottleBar = new BottleStatusBar();
+  coinBar = new CoinStatusBar();
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -25,6 +28,7 @@ class World {
         this.character.isColliding(enemy);
         if (this.character.isColliding(enemy)) {
           this.character.hit();
+          this.statusBar.setPercentage(this.character.energy);
         }
       });
     }, 200);
@@ -34,11 +38,18 @@ class World {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.ctx.translate(this.camera_x, 0);
-
     this.addObjectToMap(this.level.backgroundObjects);
+
+    this.ctx.translate(-this.camera_x, 0);
+    this.addToMap(this.statusBar);
+    this.addToMap(this.bottleBar);
+    this.addToMap(this.coinBar);
+    this.ctx.translate(this.camera_x, 0);
+
+    this.addToMap(this.character);
     this.addObjectToMap(this.level.clouds);
     this.addObjectToMap(this.level.enemies);
-    this.addToMap(this.character);
+
     this.ctx.translate(-this.camera_x, 0);
 
     // draw wird immer wieder aufgeruffenen, damit die Bewegungen der Charaktere sichtbar werden
